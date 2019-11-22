@@ -6,17 +6,17 @@ ARG BUILD_CORES
 ARG SKALIBS_VER=2.8.1.0
 ARG EXECLINE_VER=2.5.1.0
 ARG S6_VER=2.8.0.1
-ARG RSPAMD_VER=1.9.4
-ARG GUCCI_VER=0.1.0
+ARG RSPAMD_VER=2.2
+ARG GUCCI_VER=1.2.1
 
 ARG SKALIBS_SHA256_HASH="431c6507b4a0f539b6463b4381b9b9153c86ad75fa3c6bfc9dc4722f00b166ba"
 ARG EXECLINE_SHA256_HASH="b1a756842947488404db8173bbae179d6e78b6ef551ec683acca540ecaf22677"
 ARG S6_SHA256_HASH="dbe08f5b76c15fa32a090779b88fb2de9a9a107c3ac8ce488931dd39aa1c31d8"
-ARG RSPAMD_SHA256_HASH="e4720c1f45defd07dd17b9563d0ddc480c70beadbc1a833235c077960092e030"
-ARG GUCCI_SHA256_HASH="44199d8edf88442324951cafeaaea047f524deb8d887a0174cacc3aaff139740"
+ARG RSPAMD_SHA256_HASH="ea45239db0abba66f1b1a07710c2306da85bfdd921f31158486d3f6522f88be5"
+ARG GUCCI_SHA256_HASH="7068df83688dd892c77dd961bb80049b0bc20a33a6dd50f2478152b0373e08ab"
 
 LABEL description="s6 + rspamd image based on Debian" \
-      maintainer="Hardware <contact@meshup.net>" \
+      maintainer="akoscomp <nagyakos@datanest.ro>" \
       rspamd_version="Rspamd v$RSPAMD_VER built from source" \
       s6_version="s6 v$S6_VER built from source"
 
@@ -26,6 +26,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     && BUILD_DEPS=" \
     cmake \
     gcc \
+    g++ \
     make \
     ragel \
     wget \
@@ -39,7 +40,8 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     libssl-dev \
     libhyperscan-dev \
     libjemalloc-dev \
-    libmagic-dev" \
+    libmagic-dev \
+    libsodium-dev" \
  && apt-get update && apt-get install -y -q --no-install-recommends \
     ${BUILD_DEPS} \
     libevent-2.1-6 \
@@ -51,6 +53,8 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     libsqlite3-0 \
     libhyperscan5 \
     libjemalloc2 \
+    libicu63 \
+    libsodium23 \
     sqlite3 \
     openssl \
     ca-certificates \
